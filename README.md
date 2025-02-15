@@ -1,7 +1,4 @@
-🎮 Games
-Welcome to the Games repository! 🎉 Here you will find a collection of games developed by me, each with a unique concept to provide you with an entertaining experience. Dive into the fun! 🌟 And stay tuned, as more games are yet to come! 🎈
-
-🕹️ Available Games
+ailable Games
 8 Puzzle Problem: Play Now
 
 🧩 Solve the classic 8 puzzle problem by arranging the tiles in the correct order (1 to 8).
@@ -32,3 +29,4 @@ Follow the instructions in the respective game folder to start playing.
 Contributions are welcome! Feel free to submit issues and pull requests to help improve the games. Let's make this gamified experience even better! 🚀
 
 Enjoy playing! 😁🎉
+
