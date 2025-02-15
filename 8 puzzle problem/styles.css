@@ -1,0 +1,96 @@
+/* CSS for body */
+body {
+    background-image: url('./dp2.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* CSS for problem display window */
+.window_body {
+    background-color: rgba(246, 246, 246, 0.9);
+    border-radius: 15px;
+    padding: 50px;
+    width: 300px;
+    text-align: center;
+}
+
+/* for heading */
+h1 {
+    font-family: serif;
+    font-size: 30px;
+    margin-top: 0;
+    color: black;
+    border-radius: 7px;
+    background-color: rgb(240, 102, 231);
+}
+
+/* for table */
+table {
+    width: 100%;
+    max-width: 250px;
+    margin: 20px auto;
+}
+
+/* for each box */
+table tr {
+    height: 60px;
+}
+
+td {
+    background-color: lightskyblue;
+    border-radius: 5px;
+    color: black;
+    font-size: 30px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* for shuffle button */
+.shuffle_btn {
+    background-color: lawngreen;
+    border-radius: 15px;
+    color: rgb(37, 14, 205);
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.shuffle_btn:hover {
+    background-color: #4fd610;
+}
+
+td:hover {
+    background-color: #f4f4f4;
+}
+
+/* CSS for showing moves */
+.moves_display {
+    margin-top: 25px;
+    font-size: 20px;
+    color: #dc0909;
+}
+
+/* CSS for congratulations message */
+.congrats_box {
+    background-color: rgba(250, 104, 7, 0.648);
+    border-radius: 20px;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+}
