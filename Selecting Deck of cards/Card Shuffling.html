@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cards</title>
+    <style>
+        body{
+            background-color: #2776c6;
+            margin:0;
+            justify-content:center;
+            align-items:center;
+            display: flex;
+            height: 100vh;
+        }
+        .container{
+            background-color: violet;
+            padding:20px;
+            border-radius: 5px;
+            border-style:ridge;
+            text-align: center;
+        }
+        h1{
+            font-size:24px;
+            margin-bottom: 20px;
+        }
+        button{
+            border-radius:25px;
+            background-color: orange;
+            color: #190aeb;
+            padding: 10px 20px;
+            border-color: yellowgreen;
+            cursor:pointer;
+            font-size:16px;
+        }
+        button:hover{
+            background-color: #cac4d1;
+        }
+        .output{
+            margin-top:20px;
+            text-align:left;
+        }
+        ul{
+            list-style:none;
+            padding:0;
+        }
+        li{
+            font-size:18px;
+            margin-bottom:10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: red;"><u>Card Shuffling</u></h1>
+        <h3>Click button to shuffle cards</h3>
+        <button id="shuffleButton">Shuffle the Cards</button>
+        <div class="output">
+            <h2>The first five cards obtained after shuffling are :</h2>
+            <ul id="cardList"></ul>
+        </div>
+    </div>
+    <script>
+        const cardSuits =["Hearts", "Diamonds", "Clubs", "Spades"];
+        const cardRanks =["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"];
+        const cardDeck =[];
+        const shuffleButton =document.getElementById("shuffleButton");
+        const cardList =document.getElementById("cardList");
+
+        // function for creating deck of cards
+        function createCardDeck(){
+            for(const suit of cardSuits){
+                for(const rank of cardRanks){
+                    cardDeck.push(`${rank} of ${suit}`);
+                }
+            }
+        }
+
+        //function to shuffle
+        function shuffleCardDeck(array){
+            for(let i = array.length - 1; i > 0; i--){
+                const j =Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        //function to display five cards
+        function displayFirstFiveShuffledCards(){
+            const firstFiveCards =cardDeck.slice(0, 5);
+            cardList.innerHTML = "";
+            firstFiveCards.forEach((card, index) =>{
+                const listItem = document.createElement("li");
+                listItem.textContent = `${index + 1}. ${card}`;
+                cardList.appendChild(listItem);
+            });
+        }
+
+        //eventlistiner for shuffile button
+        shuffleButton.addEventListener("click", function (){
+            cardDeck.length =0;
+            createCardDeck();
+            shuffleCardDeck(cardDeck);
+            displayFirstFiveShuffledCards();
+        });
+
+        //intiation of program
+        createCardDeck();
+    </script>
+</body>
+</html>

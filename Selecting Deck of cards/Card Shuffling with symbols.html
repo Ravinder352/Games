@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Shuffling</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #4a4a4a;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #3700b3;
+        }
+        p {
+            font-size: 1.2em;
+            margin: 20px 0;
+            color: #555;
+        }
+        .card-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 150px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .card-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #4a4a4a;
+        }
+        .card-symbol {
+            font-size: 2.5em;
+            margin-top: 10px;
+            color: #6200ea;
+        }
+    </style>
+</head>
+<body>
+    <h1>Card Shuffling</h1>
+    <button onclick="shuffleCards()">Shuffle the Cards</button>
+    <p>The first five cards obtained after shuffling are:</p>
+    <div class="card-container" id="shuffled-cards"></div>
+
+    <script>
+        // Define the deck of cards with symbols
+        const deck = [
+            { name: "Ace of Spades", symbol: "🂡" },
+            { name: "Two of Spades", symbol: "🂢" },
+            { name: "Three of Spades", symbol: "🂣" },
+            { name: "Four of Spades", symbol: "🂤" },
+            { name: "Five of Spades", symbol: "🂥" },
+            { name: "Six of Spades", symbol: "🂦" },
+            { name: "Seven of Spades", symbol: "🂧" },
+            { name: "Eight of Spades", symbol: "🂨" },
+            { name: "Nine of Spades", symbol: "🂩" },
+            { name: "Ten of Spades", symbol: "🂪" },
+            { name: "Jack of Spades", symbol: "🂫" },
+            { name: "Queen of Spades", symbol: "🂭" },
+            { name: "King of Spades", symbol: "🂮" },
+            { name: "Ace of Hearts", symbol: "🂱" },
+            { name: "Two of Hearts", symbol: "🂲" },
+            { name: "Three of Hearts", symbol: "🂳" },
+            { name: "Four of Hearts", symbol: "🂴" },
+            { name: "Five of Hearts", symbol: "🂵" },
+            { name: "Six of Hearts", symbol: "🂶" },
+            { name: "Seven of Hearts", symbol: "🂷" },
+            { name: "Eight of Hearts", symbol: "🂸" },
+            { name: "Nine of Hearts", symbol: "🂹" },
+            { name: "Ten of Hearts", symbol: "🂺" },
+            { name: "Jack of Hearts", symbol: "🂻" },
+            { name: "Queen of Hearts", symbol: "🂽" },
+            { name: "King of Hearts", symbol: "🂾" },
+            { name: "Ace of Diamonds", symbol: "🃁" },
+            { name: "Two of Diamonds", symbol: "🃂" },
+            { name: "Three of Diamonds", symbol: "🃃" },
+            { name: "Four of Diamonds", symbol: "🃄" },
+            { name: "Five of Diamonds", symbol: "🃅" },
+            { name: "Six of Diamonds", symbol: "🃆" },
+            { name: "Seven of Diamonds", symbol: "🃇" },
+            { name: "Eight of Diamonds", symbol: "🃈" },
+            { name: "Nine of Diamonds", symbol: "🃉" },
+            { name: "Ten of Diamonds", symbol: "🃊" },
+            { name: "Jack of Diamonds", symbol: "🃋" },
+            { name: "Queen of Diamonds", symbol: "🃍" },
+            { name: "King of Diamonds", symbol: "🃎" },
+            { name: "Ace of Clubs", symbol: "🃑" },
+            { name: "Two of Clubs", symbol: "🃒" },
+            { name: "Three of Clubs", symbol: "🃓" },
+            { name: "Four of Clubs", symbol: "🃔" },
+            { name: "Five of Clubs", symbol: "🃕" },
+            { name: "Six of Clubs", symbol: "🃖" },
+            { name: "Seven of Clubs", symbol: "🃗" },
+            { name: "Eight of Clubs", symbol: "🃘" },
+            { name: "Nine of Clubs", symbol: "🃙" },
+            { name: "Ten of Clubs", symbol: "🃚" },
+            { name: "Jack of Clubs", symbol: "🃛" },
+            { name: "Queen of Clubs", symbol: "🃝" },
+            { name: "King of Clubs", symbol: "🃞" }
+        ];
+
+        // Function to shuffle the deck
+        function shuffleCards() {
+            const shuffledDeck = [...deck];
+            for (let i = shuffledDeck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledDeck[i], shuffledDeck[j]] = [shuffledDeck[j], shuffledDeck[i]];
+            }
+
+            // Display the first five cards
+            const shuffledCardsDiv = document.getElementById("shuffled-cards");
+            shuffledCardsDiv.innerHTML = ""; // Clear previous results
+
+            for (let i = 0; i < 5; i++) {
+                const card = shuffledDeck[i];
+                const cardDiv = document.createElement("div");
+                cardDiv.className = "card";
+                cardDiv.innerHTML = `
+                    <div class="card-name">${card.name}</div>
+                    <div class="card-symbol">${card.symbol}</div>
+                `;
+                shuffledCardsDiv.appendChild(cardDiv);
+            }
+        }
+    </script>
+</body>
+</html>
