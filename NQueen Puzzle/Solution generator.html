@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>N-Queens Problem</title>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: lightblue;
+        }
+
+        .container{
+            text-align: center;
+            background-color:#dfa1dd;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-container{
+            display: block;
+            margin-bottom:20px;
+        }
+
+        .chessboard-container{
+            display:none;
+            margin-top:20px;
+        }
+
+        .reset-button{
+            margin-top:20px;
+        }
+
+        .chessboard {
+            display:grid;
+            grid-template-columns:repeat(var(--N, 8), 1cm);
+            grid-template-rows: repeat(var(--N, 8), 1cm);
+            width: calc(var(--N, 8)*1cm);
+            height: calc(var(--N, 8)*1cm);
+            border: 2px solid brown;
+            background-color:white;
+            margin-left:20px;
+        }
+
+        .cell{
+            width:1cm;
+            height:1cm;
+            text-align:center;
+            vertical-align:middle;
+            line-height:1cm;
+            border: 1px solid #000;
+        }
+
+        .queen{
+            font-size: 1cm;
+            color: #FF5733;
+        }
+
+        h1, h2{
+            margin:0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>N-Queens Problem</h1><br>
+        <div class="input-container">
+            <label for="queensInput">Enter value for  N:</label>
+            <input type="number" id="queensInput" min="4" max="12" value="8">
+            <button id="submitButton">Submit</button>
+        </div>
+        <div class="chessboard-container">
+            <h2>Solution</h2><br>
+            <div id="chessboard" class="chessboard"></div>
+            <button class="reset-button" id="resetButton">Reset</button>
+        </div>
+        <!-- 21MID0018 -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function (){
+            $('#submitButton').click(function (){
+                const N =parseInt($('#queensInput').val());
+                if (N>=4 && N<=12){
+                    $('.input-container').hide();
+                    $('.chessboard-container').show();
+                    solveNQueens(N);
+                } else{
+                    alert("Please enter a valid N(4-12).");
+                }
+            });
+            $('#resetButton').click(function (){
+                $('.input-container').show();
+                $('.chessboard-container').hide();
+            });
+        });
+
+        function solveNQueens(N){
+            document.documentElement.style.setProperty('--N', N);
+            const chessboard = Array(N).fill(null).map(() => Array(N).fill(false));
+
+            function isSafe(row,col){
+                // Checking from top
+                for (let i=0; i< row;i++){
+                    if (chessboard[i][col]) return false;
+                }
+
+                // Checking diagonally left
+                for (let i=row, j=col; i>=0 && j>=0; i--, j--){
+                    if (chessboard[i][j]) return false;
+                }
+
+                // Checking diagonally rignt
+                for (let i = row, j = col; i>=0 && j <N; i--, j++){
+                    if (chessboard[i][j]) return false;
+                }
+
+                return true;
+            }
+
+            function solve(row){
+                if (row === N){
+                    displaySolution(chessboard);
+                    return;
+                }
+
+                for (let col = 0; col < N; col++){
+                    if (isSafe(row, col)){
+                        chessboard[row][col] =true;
+                        solve(row + 1);
+                        chessboard[row][col] =false;
+                    }
+                }
+            }
+
+            function displaySolution(chessboard){
+                $('#chessboard').empty();
+
+                for (let i = 0; i < N; i++){
+                    for (let j = 0; j < N; j++){
+                        const cell = $('<div class="cell"></div>');
+                        if (chessboard[i][j]){
+                            cell.append('<span class="queen">♛</span>');
+                        }
+                        $('#chessboard').append(cell);
+                    }
+                }
+            }
+
+            solve(0);
+        }
+    </script>
+</body>
+</html>

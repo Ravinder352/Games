@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N-Queens Problem</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e0eb48;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #game-container {
+            text-align: center;
+            background-color: #22dfe2;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+            border-radius: 55px;
+            border: 1px solid #f4f2f5;
+            background-color: #c07de1;
+        }
+
+        .chessboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Initially for 4x4 */
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            gap: 5px;
+            border: 3px solid #ccc;
+            border-radius: 10px;
+        }
+
+        .cell {
+            background-color: #f7f7f7;
+            border-radius: 8px;
+            border: 1px solid #d1d1d1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff5733;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .cell:hover {
+            background-color: #ececec;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .queen {
+            color: #ff5733;
+            transition: color 0.3s;
+        }
+
+        #resetButton, #setSizeButton {
+            margin-top: 20px;
+            font-size: 16px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #resetButton:hover, #setSizeButton:hover {
+            background-color: #3ddd45;
+        }
+
+        #sizeInput {
+            margin-top: 20px;
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 80px;
+            text-align: center;
+        }
+
+        #statusMessage, #congratulations, #errorMessage {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        #congratulations {
+            color: green;
+        }
+
+        #errorMessage {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>N-Queens Game</h1>
+        <label for="sizeInput">Enter N (for N x N chessboard): </label>
+        <input type="number" id="sizeInput" value="4" min="4">
+        <button id="setSizeButton">Set Board Size</button>
+
+        <div class="chessboard" id="chessboard">
+            <!-- Chessboard cells will be dynamically generated here -->
+        </div>
+        
+        <button id="resetButton">Reset</button>
+        <div id="statusMessage"></div>
+        <div id="congratulations">Congratulations! Correct Solution!</div>
+        <div id="errorMessage">Incorrect placement! Please try again.</div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        let n = 4; // Default size of the board
+        let queenPositions = [];
+
+        $(document).ready(function () {
+            // Function to render the chessboard
+            function renderBoard(size) {
+                $("#chessboard").empty().css("grid-template-columns", `repeat(${size}, 1fr)`);
+                const cellSize = 300 / size; // Dynamically adjust size
+                for (let i = 0; i < size * size; i++) {
+                    $("#chessboard").append('<div class="cell" data-row="' + Math.floor(i / size) + '" data-col="' + (i % size) + '" data-queen="false"></div>');
+                }
+                $(".cell").css({ width: `${cellSize}px`, height: `${cellSize}px` });
+                queenPositions = [];
+                $("#congratulations").hide();
+                $("#errorMessage").hide();
+                $("#statusMessage").text('');
+            }
+
+            // Function to reset the game
+            $("#resetButton").click(function () {
+                $(".cell").removeClass("queen").text("").data("queen", "false");
+                queenPositions = [];
+                $("#congratulations").hide();
+                $("#errorMessage").hide();
+                $("#statusMessage").text('');
+            });
+
+            // Function to handle setting the size of the board
+            $("#setSizeButton").click(function () {
+                n = parseInt($("#sizeInput").val());
+                renderBoard(n);
+            });
+
+            // Place and remove queens on click
+            $(document).on("click", ".cell", function () {
+                const row = $(this).data("row");
+                const col = $(this).data("col");
+                const isQueen = $(this).data("queen") === "true";
+
+                if (isQueen) {
+                    $(this).removeClass("queen").text("").data("queen", "false");
+                    queenPositions = queenPositions.filter(pos => !(pos.row === row && pos.col === col));
+                } else {
+                    if (queenPositions.length < n) {
+                        $(this).addClass("queen").text("Q").data("queen", "true");
+                        queenPositions.push({ row: row, col: col });
+                    }
+                }
+
+                if (queenPositions.length === n) {
+                    if (isSolutionValid()) {
+                        $("#congratulations").show();
+                        $("#errorMessage").hide();
+                    } else {
+                        $("#congratulations").hide();
+                        $("#errorMessage").show();
+                    }
+                } else {
+                    $("#congratulations").hide();
+                    $("#errorMessage").hide();
+                }
+            });
+
+            // Function to check if the queen placement is valid (no attacks)
+            function isSolutionValid() {
+                for (let i = 0; i < queenPositions.length; i++) {
+                    for (let j = i + 1; j < queenPositions.length; j++) {
+                        if (
+                            queenPositions[i].row === queenPositions[j].row ||  // Same row
+                            queenPositions[i].col === queenPositions[j].col ||  // Same column
+                            Math.abs(queenPositions[i].row - queenPositions[j].row) === Math.abs(queenPositions[i].col - queenPositions[j].col) // Same diagonal
+                        ) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            // Initial render of the board
+            renderBoard(n);
+        });
+    </script>
+</body>
+</html>
