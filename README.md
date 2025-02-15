@@ -40,7 +40,7 @@
 
 ## 🤝 Contributing
 
-**Contributions are welcome!** Feel free to submit issues and pull requests to help improve the games. Let's make this gamified experience even better! 🚀
+**Contributions are welcome!** Feel free to submit issues and pull requests to help improve the games.Let’s relive the magic of our childhood favorites together! 🚀
 
 ---
 
